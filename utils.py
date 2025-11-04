@@ -2,6 +2,9 @@
 import sys
 import csv
 
+# Prefixes various credit card processing companies insert in payee name
+vendor_prefixes = ['GglPay ', 'TST*', 'SQ *', 'IC*', 'UEP*']
+
 def detect(filename: str):
     """
     Do preliminary scan of the CSV file to find 
@@ -94,5 +97,47 @@ def sanitizeAmount(num_str: str):
     """
     if num_str == '':
         return 0
+    num_str = num_str.removeprefix('$')
     num = num_str.strip('"').replace(',', '')
     return float(num)
+
+def readCategories(filename: str):
+    """Read the category data from a file
+
+    Args:
+        filename (str): filename for the category file
+
+    Returns:
+        dict: { vendor : category, ...}
+    """
+      
+    cats = {}
+    with open(filename, 'r') as csvfile:
+        csvreader = csv.reader(csvfile, delimiter=',', quotechar='"')
+        for i, row in enumerate(csvreader):
+            if len(row) == 0:
+                # Ignore blank lines
+                continue
+            if len(row) < 2:
+                print("Syntax error in line %d: Need 2 fields separated "
+                    "by a comma: vendor, category!" % i, file=sys.stderr)
+                print(row, file=sys.stderr)
+                continue
+            vendor = row[0].strip()
+            
+            # Strip of known vendor-related prefixes
+            for prefix in vendor_prefixes:
+                vendor = vendor.removeprefix(prefix)
+            vendor = vendor.strip()    
+            category = row[1].strip()
+            if vendor and category:
+                cats[vendor] = category
+            else:
+                if not vendor:
+                    print("Error in line %d: vendor field is "
+                            "empty (before the comma)!" % i, file=sys.stderr)
+                else:
+                    print("Error in line %d: category field for "
+                            "vendor='%s' is empty (after the comma)!" % (i, vendor), file=sys.stderr)
+                continue
+    return cats
