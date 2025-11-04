@@ -17,7 +17,7 @@ def detect(filename: str):
         dict: the information detected from the csv file:
         {
             'header_line': int,
-            'negate': boolean (True if numerical values should negated),
+            'negate': boolean (True if amount values should negated),
             'date': int <index of the date field'>, 
             'description': int <index of the description field'>, 
             'amount': int <index of the amount field'>, 
@@ -52,9 +52,9 @@ def detect(filename: str):
     
     # Do another pass through the data to see if we need to negate the amounts
     if 'debit' in header and 'credit' in header:
-        info['negate'] = False
-    elif 'debits(-)' in header:
         info['negate'] = True
+    elif 'debits(-)' in header:
+        info['negate'] = False
     else:
         num = 0
         num_negative = 0

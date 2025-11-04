@@ -1,12 +1,14 @@
 import os
 import sys
+from dateutil import parser
+from datetime import datetime
 
 from utils import detect, readCategories, sanitizeAmount, vendor_prefixes
 
 exec_dir = os.path.dirname(os.path.realpath(__file__))
 
 def csv2qif(args: object):
-    
+   
     # First, read the categories
     catmap = {}
     if os.path.exists('categories.txt'):
@@ -31,7 +33,6 @@ def csv2qif(args: object):
         
     # Get the info about the CSV file
     info = detect(args.csvfilename)
-    print(info)
     NEGATE = info['negate']
     SKIP_LINES = info['header_line']
     DATE = info['date']
@@ -46,16 +47,16 @@ def csv2qif(args: object):
     data = []
     
     # Read the csv file
-    with open(args.csvfilename, 'r') as csvfile:
+    with open(args.csvfilename, 'r') as f:
         # Skip lines if necessary
         for _ in range(SKIP_LINES):
-            next(csvfile)
-        header_raw = csvfile.readline()
+            next(f)
+        header_raw = f.readline()
         
         # Read and process the data
-        lines = csvfile.readlines()
+        lines = f.readlines()
         for line in lines:
-            if len(line) == 0:
+            if len(line.strip()) == 0:
                 # Skip blank lines
                 continue
             if line.find('Beginning balance') >= 0:
@@ -66,8 +67,10 @@ def csv2qif(args: object):
             for prefix in vendor_prefixes:
                 payee = payee.removeprefix(prefix)
             payee = payee.strip()
+            date_str = fields[DATE].strip()
+            date = parser.parse(date_str)
             line_data = {
-                'date' : fields[DATE],
+                'date' : date.strftime("%m/%d/%Y"),
                 'payee' : payee,   
                 'amount' : sanitizeAmount(fields[AMOUNT]),
                 'category' : fields[CATEGORY] if CATEGORY != None else None,
@@ -87,7 +90,7 @@ def csv2qif(args: object):
         amount = negate * line['amount']
         if has_credit and line['credit'] != '':
             # Override the amount with the credit, if available   
-            amount = -sanitizeAmount(line['credit'])
+            amount = sanitizeAmount(line['credit'])
         line['amount'] = amount
 
         # Check for known payees
