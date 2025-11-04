@@ -66,7 +66,7 @@ def csv2qif(args: object):
             payee = fields[PAYEE]
             for prefix in vendor_prefixes:
                 payee = payee.removeprefix(prefix)
-            payee = payee.strip()
+            payee = " ".join(payee.strip().split())  # Remove extra blanks
             date_str = fields[DATE].strip()
             date = parser.parse(date_str)
             line_data = {

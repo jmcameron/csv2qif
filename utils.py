@@ -66,7 +66,7 @@ def detect(filename: str):
                     num += 1
                     if amount < 0:
                         num_negative += 1            
-        info['negate'] = num_negative > num / 3
+        info['negate'] = num_negative < num / 3
 
     return info
 
