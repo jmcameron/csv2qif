@@ -42,7 +42,7 @@ def detect(filename: str):
             if len(intersection) >= 3:
                 header = fields
                 info['header_line'] = line_number
-    
+
     # Find the column for each field we need
     info['date'] = findField(header, 'date', ['date', 'transaction date'])
     info['description'] = findField(header, 'description', ['description'])

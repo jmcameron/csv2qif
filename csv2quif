@@ -20,6 +20,8 @@ overrides the version in the executable directory.
 """))
 
 parser.add_argument('csvfilename', type=str, nargs='?')
+parser.add_argument('--output', nargs='?', default=sys.stdout,
+                    help="Send the output to the specified file, defaults to stdout")
 parser.add_argument('--printcats', action="store_true", default=False,
                     help="Print the categories read from the 'categories.txt' file and exit.")
 parser.add_argument('--complain', action="store_true", default=False,

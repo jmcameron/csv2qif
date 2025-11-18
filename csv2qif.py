@@ -1,5 +1,6 @@
 import os
 import sys
+import csv
 from dateutil import parser
 from datetime import datetime
 
@@ -8,7 +9,13 @@ from utils import detect, readCategories, sanitizeAmount, vendor_prefixes
 exec_dir = os.path.dirname(os.path.realpath(__file__))
 
 def csv2qif(args: object):
-   
+    print(args)
+    
+    # Process the output filename
+    OUTPUT = args.output
+    if type(args.output) == str:
+        OUTPUT = open(args.output, 'w')
+    
     # First, read the categories
     catmap = {}
     if os.path.exists('categories.txt'):
@@ -47,23 +54,24 @@ def csv2qif(args: object):
     data = []
     
     # Read the csv file
-    with open(args.csvfilename, 'r') as f:
+    with open(args.csvfilename, 'r') as csvfile:
         # Skip lines if necessary
         for _ in range(SKIP_LINES):
-            next(f)
-        header_raw = f.readline()
-        
+            next(csvfile)
+            
+        csv_reader = csv.reader(csvfile)
+       
         # Read and process the data
-        lines = f.readlines()
-        for line in lines:
-            if len(line.strip()) == 0:
+        for line_num, fields in enumerate(csv_reader, start=1):
+            if line_num == 1:
+                header = fields
+                continue
+            if len(fields) == 0:
                 # Skip blank lines
                 continue
-            if line.find('Beginning balance') >= 0:
-                # Skip irrelevant line
-                continue
-            fields = [s.strip() for s in line.split(',')]
-            payee = fields[PAYEE]
+
+            # Extract the data
+            payee = fields[PAYEE].strip()
             for prefix in vendor_prefixes:
                 payee = payee.removeprefix(prefix)
             payee = " ".join(payee.strip().split())  # Remove extra blanks
@@ -78,10 +86,7 @@ def csv2qif(args: object):
                 'memo' : None,
             }
             data.append(line_data)
-
-    # Process the header (for reference, if necessary)    
-    header = [s.lower().strip() for s in header_raw.split(',')]
-            
+           
     # Do one more pass over the data to fix things
     has_credit = CREDIT != None
     negate = -1 if NEGATE else 1
@@ -109,15 +114,18 @@ def csv2qif(args: object):
             line['category'] = category
 
     for line in data:
-        print("D%s" % line['date'])
-        print("T%.2f" % line['amount'])
-        print("P%s" % line['payee'])
-        print("L%s" % line['category'])
+        print("D%s" % line['date'], file=OUTPUT)
+        print("T%.2f" % line['amount'], file=OUTPUT)
+        print("P%s" % line['payee'], file=OUTPUT)
+        print("L%s" % line['category'], file=OUTPUT)
         if line['memo']:
-            print("M%s" % line['memo'])
-        print("^")
+            print("M%s" % line['memo'], file=OUTPUT)
+        print("^", file=OUTPUT)
 
     if args.complain:
         print("\nUnrecognized Payees:", file=sys.stderr)
         for payee in sorted([s for s in unknown_payees]):
             print("   %s" % payee, file=sys.stderr)
+
+    if type(args.output) == str:
+        OUTPUT.close()
