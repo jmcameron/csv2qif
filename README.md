@@ -43,9 +43,10 @@ Running on Windows
 ------------------
 
 First you must install Python on your windows system.  See 
-[https://www.python.org/downloads/windows/](to download Python for Windows).
+[to download Python for Windows](https://www.python.org/downloads/windows/).
 
 Enjoy!
 
 -Jonathan Cameron
+
  jmcameron@gmail.com
