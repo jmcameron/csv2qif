@@ -10,8 +10,8 @@ Here is how to run this program:
 
     csv2qif statement.csv > statement.qif
 
-where 'statement.csv' is a CSV file downloaded from a credit card company or bank.
-This will create the file 'statement.qif' from the CSV file 'statement.csv'.
+where 'statement.csv' is a CSV/Excel file downloaded from a credit card company or bank.
+This will create the file 'statement.qif' from the file 'statement.csv'.
 
 The program supports several options. Do:
 
