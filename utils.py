@@ -1,6 +1,7 @@
 # csv2qif utils
 import sys
 import csv
+import io
 
 # Prefixes various credit card processing companies insert in payee name
 vendor_prefixes = ['GglPay ', 'TST*', 'SQ *', 'IC*', 'UEP*']
@@ -61,7 +62,10 @@ def detect(filename: str):
         with open(filename) as csvfile:
             for line_number, line in enumerate(csvfile):
                 if line_number > info['header_line']:
-                    fields = [s.replace('\n', '').lower() for s in line.split(',') if s != '' ]
+                    # Use csv to parse the single line
+                    string_buffer = io.StringIO(line)
+                    csv_reader = csv.reader(string_buffer)
+                    fields = next(csv_reader)
                     amount = sanitizeAmount(fields[info['amount']])
                     num += 1
                     if amount < 0:
