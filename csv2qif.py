@@ -9,7 +9,6 @@ from utils import detect, readCategories, sanitizeAmount, vendor_prefixes
 exec_dir = os.path.dirname(os.path.realpath(__file__))
 
 def csv2qif(args: object):
-    print(args)
     
     # Process the output filename
     OUTPUT = args.output

@@ -60,7 +60,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(results['description'], 3)
         self.assertEqual(results['negate'], False)
         
-    def test_test_qif1(self):
+    def test_qif_test1(self):
         # Parse the test1.csv file
         csv2qif(Namespace(csvfilename=os.path.join(base_dir, 'test1.csv'),
                           output='/tmp/test1.qif', printcats=False, complain=False))
@@ -70,6 +70,46 @@ class TestStringMethods(unittest.TestCase):
             actual_lines = f_actual.readlines()
             self.assertListEqual(actual_lines, expected_lines)
 
+    def test_qif_test2(self):
+        # Parse the test2.csv file
+        csv2qif(Namespace(csvfilename=os.path.join(base_dir, 'test2.csv'),
+                          output='/tmp/test2.qif', printcats=False, complain=False))
+        # Compare the results
+        with open("test2.qif", "r") as f_expected, open("/tmp/test2.qif", "r") as f_actual:
+            expected_lines = f_expected.readlines()
+            actual_lines = f_actual.readlines()
+            self.assertListEqual(actual_lines, expected_lines)
+
+    def test_qif_test3(self):
+        # Parse the test3.csv file
+        csv2qif(Namespace(csvfilename=os.path.join(base_dir, 'test3.csv'),
+                          output='/tmp/test3.qif', printcats=False, complain=False))
+        # Compare the results
+        with open("test3.qif", "r") as f_expected, open("/tmp/test3.qif", "r") as f_actual:
+            expected_lines = f_expected.readlines()
+            actual_lines = f_actual.readlines()
+            self.assertListEqual(actual_lines, expected_lines)
+
+    def test_qif_test4(self):
+        # Parse the test4.csv file
+        csv2qif(Namespace(csvfilename=os.path.join(base_dir, 'test4.csv'),
+                          output='/tmp/test4.qif', printcats=False, complain=False))
+        # Compare the results
+        with open("test4.qif", "r") as f_expected, open("/tmp/test4.qif", "r") as f_actual:
+            expected_lines = f_expected.readlines()
+            actual_lines = f_actual.readlines()
+            self.assertListEqual(actual_lines, expected_lines)
+    
+    def test_qif_test5(self):
+        # Parse the test5.csv file
+        csv2qif(Namespace(csvfilename=os.path.join(base_dir, 'test5.csv'),
+                          output='/tmp/test5.qif', printcats=False, complain=False))
+        # Compare the results
+        with open("test5.qif", "r") as f_expected, open("/tmp/test5.qif", "r") as f_actual:
+            expected_lines = f_expected.readlines()
+            actual_lines = f_actual.readlines()
+            self.assertListEqual(actual_lines, expected_lines)
+            
 if __name__ == '__main__':
     unittest.main()
 
