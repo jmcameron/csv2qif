@@ -35,6 +35,10 @@ default version of this file can be kept in the directory of the **csv2qif**
 executable.  If a copy of this file is found in the directory that this ommand
 is run in, it overrides the version in the executable directory.
 
+Note that if the CSV/Excel file has a column named 'Category' and no match is 
+found in the 'categories.txt' file, the category from the 'Category' column
+will be used.
+
 Running on Windows
 ------------------
 
