@@ -42,7 +42,8 @@ will be used.
 Running on Windows
 ------------------
 
-First you must install Python on your windows system.  See [https://www.python.org/downloads/windows/](to download Python for Windows).
+First you must install Python on your windows system.  See 
+[https://www.python.org/downloads/windows/](to download Python for Windows).
 
 Enjoy!
 
