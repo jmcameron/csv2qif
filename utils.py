@@ -4,7 +4,7 @@ import csv
 import io
 
 # Prefixes various credit card processing companies insert in payee name
-vendor_prefixes = ['GglPay ', 'TST*', 'SQ *', 'IC*', 'UEP*']
+vendor_prefixes = ['GglPay ', 'TST*', 'SQ *', 'IC*', 'UEP*', 'SPO*']
 
 def detect(filename: str):
     """
@@ -63,7 +63,7 @@ def detect(filename: str):
             for line_number, line in enumerate(csvfile):
                 if line_number > info['header_line']:
                     # Use csv to parse the single line
-                    string_buffer = io.StringIO(line)
+                    string_buffer = io.StringIO(line.strip())
                     csv_reader = csv.reader(string_buffer)
                     fields = next(csv_reader)
                     amount = sanitizeAmount(fields[info['amount']])
