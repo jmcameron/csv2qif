@@ -3,6 +3,7 @@ categories.txt
 *.csv
 *.CSV
 *.qif
+Desktop
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
