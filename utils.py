@@ -4,7 +4,7 @@ import csv
 import io
 
 # Prefixes various credit card processing companies insert in payee name
-vendor_prefixes = ['CCI*', 'GglPay ', 'IC*', 'SPO*', 'SQ *', 'TST*', 'UEP*']
+vendor_prefixes = ['CCI*', 'CKE*', 'GglPay ', 'IC*', 'SPO*', 'SQ *', 'TST*', 'UEP*']
 
 def detect(filename: str):
     """
